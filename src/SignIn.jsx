@@ -1,17 +1,15 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
-import { useOktaAuth } from '@okta/okta-react';
 import SignInForm from './SignInForm';
+import { withOktaAuth } from '@okta/okta-react';
 
-const SignIn = ({ issuer }) => {
-  const { authState } = useOktaAuth();
-
-  if (authState.isPending) {
-    return <div>Loading...</div>;
+export default withOktaAuth(class SignIn extends Component {
+  render() {
+    if (this.props.authState.isPending) {
+      return <div>Loading...</div>;
+    }
+    return this.props.authState.isAuthenticated ?
+      <Redirect to={{ pathname: '/' }}/> :
+      <SignInForm issuer={this.props.issuer} />;
   }
-  return authState.isAuthenticated ?
-    <Redirect to={{ pathname: '/' }}/> :
-    <SignInForm issuer={issuer} />;
-};
-
-export default SignIn;
+});
