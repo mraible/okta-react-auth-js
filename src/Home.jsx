@@ -1,9 +1,10 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { useOktaAuth } from '@okta/okta-react';
 
 const Home = () => {
   const { authState, authService } = useOktaAuth();
+  const history = useHistory();
 
   if (authState.isPending) {
     return <div>Loading...</div>;
@@ -11,7 +12,7 @@ const Home = () => {
 
   const button = authState.isAuthenticated ?
     <button onClick={() => {authService.logout()}}>Logout</button> :
-    <button onClick={() => {authService.login()}}>Login</button>;
+    <button onClick={() => {history.push('/login')}}>Login</button>;
 
   return (
     <div>
